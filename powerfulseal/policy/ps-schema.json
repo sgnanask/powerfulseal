@@ -427,6 +427,26 @@
                 }
             },
             "required": ["kill"]
+        },
+
+        "actionDeletePod": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "deletepod": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "probability": {
+                            "type": "number"
+                        },
+                        "force": {
+                            "type": "boolean"
+                        }
+                    }
+                }
+            },
+            "required": ["deletepod"]
         }
     }
 }

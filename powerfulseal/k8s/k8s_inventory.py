@@ -65,6 +65,15 @@ class K8sInventory():
             )
         ]
 
+
+    def delete_pod(self, namespace=None, name=None):
+        """ Delete a pod from namespace
+        """
+        self.k8s_client.delete_pod(
+            namespace=namespace,
+            name=name
+        )
+
     def find_pods(self, namespace, selector=None, deployment_name=None):
         """ Find pods in a namespace, for a deployment or selector.
         """

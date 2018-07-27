@@ -437,3 +437,32 @@ class PSCmd(cmd.Cmd):
                 return print("Cancelling")
             self.execute(cmd, [node])
 
+    def do_deletepod(self, line):
+        """
+        Delete a pod
+        Syntax:
+            delete pod-number
+        To show the pod numbers, run cached_pods.
+        Executes `kubectl delete pod <name>`
+        """
+        cmd = Command(line)
+        pod_num = cmd.get(0)
+        if pod_num is None:
+            return
+        try:
+            pod_num = int(pod_num)
+        except ValueError:
+            return
+
+        # find the pod
+        pod = None
+        for p in self.k8s_inventory.last_pods:
+            if p.num == pod_num:
+                pod = p
+                break
+        if pod is None:
+            return print("Pod number not found.")
+
+        print("Will delete '%s' from namespace '%s'" % (pod.name, pod.namespace))
+        self.k8s_inventory.delete_pod(pod.namespace, pod.name)
+

@@ -143,3 +143,20 @@ class K8sClient():
             namespace=namespace,
             label_selector=selector,
         ).items
+
+    def delete_pod(self, namespace, name):
+        """
+            https://github.com/kubernetes-incubator/client-python/blob/master/kubernetes/docs/
+            CoreV1Api.md##delete_namespaced_pod
+        """
+        body = kubernetes.client.V1DeleteOptions()
+        try:
+            return self.client_corev1api.delete_namespaced_pod(
+                namespace=namespace,
+                name=name,
+                body=body
+            )
+        except ApiException as e:
+            self.logger.exception(e)
+            raise
+
