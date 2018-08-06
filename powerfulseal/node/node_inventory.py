@@ -35,6 +35,9 @@ class NodeInventory():
         nodes = self.nodes_by_id.values()
         return sorted(nodes, key=lambda x: getattr(x, sort_key))
 
+    def set_restrict_groups(self, restrict_to_groups=None):
+        self.local_ips = restrict_to_groups or {}
+
     def get_node_by_ip(self, ip):
         return self.nodes_by_ip.get(ip, None)
 

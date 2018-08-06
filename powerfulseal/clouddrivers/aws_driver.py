@@ -54,9 +54,6 @@ class AWSDriver(AbstractDriver):
         """ Downloads a fresh set of nodes form the API.
         """
         self.logger.info("Synchronizing remote nodes")
-        """ Downloads a fresh set of nodes form the API.
-        """
-        self.logger.info("Synchronizing remote nodes")
         self.remote_servers = self.conn.instances.all()
         self.amount_of_servers = list(self.conn.instances.all())
         self.logger.info("Fetched %s remote servers" % len(self.amount_of_servers))

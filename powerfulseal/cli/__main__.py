@@ -54,6 +54,12 @@ def main(argv):
         action='count',
         help='Verbose logging.'
     )
+    prog.add_argument(
+        '--log-file',
+        default=None,
+        help='Location of log file',
+    )
+
 
     # inventory related config
     inventory_options = prog.add_mutually_exclusive_group(required=True)
@@ -141,10 +147,19 @@ def main(argv):
         log_level = logging.INFO
     else:
         log_level = logging.DEBUG
-    logging.basicConfig(
-        stream=sys.stdout,
-        level=log_level
-    )
+    
+    if args.log_file is not None:
+        logging.basicConfig(
+            format="[%(asctime)s] %(levelname)s [%(name)s.%(funcName)s:%(lineno)d] %(message)s", 
+            filename=args.log_file,
+            level=log_level
+        )
+    else:
+        logging.basicConfig(
+            format="[%(asctime)s] %(levelname)s [%(name)s.%(funcName)s:%(lineno)d] %(message)s",
+            stream=sys.stdout,
+            level=log_level
+        )
     logger = logging.getLogger(__name__)
     logger.setLevel(log_level)
 
@@ -165,7 +180,7 @@ def main(argv):
 
     # build a k8s client
     kube_config = args.kube_config
-    logger.debug("Creating kubernetes client with config %d", kube_config)
+    logger.debug("Creating kubernetes client with config %s", kube_config)
     k8s_client = K8sClient(kube_config=kube_config)
     k8s_inventory = K8sInventory(k8s_client=k8s_client)
 
@@ -201,6 +216,7 @@ def main(argv):
             driver=driver,
             executor=executor,
             k8s_inventory=k8s_inventory,
+            k8s_client=k8s_client
         )
         while True:
             try:

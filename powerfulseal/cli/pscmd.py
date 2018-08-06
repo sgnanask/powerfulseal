@@ -77,13 +77,14 @@ class PSCmd(cmd.Cmd):
         PowerfulSeal cli base class.
     """
 
-    def __init__(self, inventory, driver, executor, k8s_inventory):
+    def __init__(self, inventory, driver, executor, k8s_inventory, k8s_client):
         super().__init__()
         self.inventory = inventory
         self.driver = driver
         self.prompt = "(seal) $ "
         self.executor = executor
         self.k8s_inventory = k8s_inventory
+        self.k8s_client = k8s_client
 
     def completedefault(self, text, line, begidx, endidx):
         suggestions = []
@@ -139,6 +140,7 @@ class PSCmd(cmd.Cmd):
         """
         Synchronises the state with the remote API
         """
+        self.inventory.set_restrict_groups(self.k8s_client.get_nodes_groups())
         self.inventory.sync()
         self.do_nodes("")
 
